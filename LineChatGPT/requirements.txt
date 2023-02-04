@@ -1,0 +1,7 @@
+flask_ngrok
+line-bot-sdk
+flask
+revChatGPT
+openai
+pre-commit
+tiktoken
