@@ -2,15 +2,19 @@
 from flask import Flask,request,abort
 import os
 from chatgpt import ChatGPT
-# from flask_ngrok import run_with_ngrok
+
+# connet to db
+import psycopg2 as db
+conn = db.connect(host='localhost', dbname='flaskdb', user='megoo', password=os.getenv("DATABASE_PASSWORD"))
 
 
 #待官方 API  出來前暫時棄用
 # import openai
 # openai.api_key = ""
 # # my_api_key = "
-
 # 載入 LINE Message API 相關函式庫
+
+
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
@@ -30,6 +34,7 @@ working_status = os.getenv("DEFALUT_TALKING", default = "true").lower() == "true
 
 
 app = Flask(__name__)
+
 chatgpt = ChatGPT()
 # run_with_ngrok(app)   #starts ngrok when the app is run
 @app.route("/")
