@@ -143,7 +143,7 @@ def handle_message(event):
         return
     
     if event.message.text.startswith('__'):
-        working_status = False
+        working_status = True
         cata = event.message.text[2:]
         ques = get_question(cata)
         post_ques = '//' + ques
