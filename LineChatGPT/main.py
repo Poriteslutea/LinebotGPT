@@ -2,6 +2,7 @@
 from flask import Flask,request,abort
 import os
 from chatgpt import ChatGPT
+from questions import get_question
 
 # connet to db
 import psycopg2 as db
@@ -17,7 +18,7 @@ conn = db.connect(host='localhost', dbname='flaskdb', user='megoo', password=os.
 
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, PostbackAction,URIAction, MessageAction, FlexSendMessage, ButtonsTemplate
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, PostbackEvent, PostbackAction,URIAction, MessageAction, FlexSendMessage, ButtonsTemplate
 
 
 
@@ -121,7 +122,7 @@ def handle_message(event):
                         "action": {
                         "type": "message",
                         "label": "Python基礎題",
-                        "text": "_Python基礎題"
+                        "text": "__Python基礎題"
                         }
                     },
                     {
@@ -131,7 +132,7 @@ def handle_message(event):
                         "action": {
                         "type": "message",
                         "label": "Python進階題",
-                        "text": "_Python進階題"
+                        "text": "__Python進階題"
                         }
                     }
                     ],
@@ -140,6 +141,55 @@ def handle_message(event):
                 }
             ))
         return
+    
+    if event.message.text.startswith('__'):
+        working_status = False
+        cata = event.message.text[2:]
+        ques = get_question(cata)
+        post_ques = '//' + ques
+        line_bot_api.reply_message(
+            event.reply_token,
+            FlexSendMessage(
+                alt_text='question',
+                contents={
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                        {
+                            "type": "text",
+                            "text": ques,
+                            "wrap": True,
+                        }
+                        ]
+                    },
+                    "footer": {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                            {
+                                "type": "button",
+                                "action": {
+                                "type": "postback",
+                                "label": "我要問GPT",
+                                "data": post_ques,
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "action": {
+                                "type": "message",
+                                "label": "回到主頁",
+                                "text": "Python面試題"
+                                }
+                            }
+                            ]
+                    }
+                    }
+            )
+        )
+
 
     if event.message.text == "閉嘴":
         working_status = False
@@ -162,6 +212,22 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=reply_msg))
+
+
+@line_handler.add(PostbackEvent)
+def handle_postback(event):
+    res = event.postback.data
+    if res.startswith('//'):
+        q = res[2:]
+        print(q)
+        chatgpt.add_msg(f"HUMAN:Python中，{q}\n")
+        reply_msg = chatgpt.get_response().replace("AI:", "", 1)
+        # chatgpt.add_msg(f"AI:{reply_msg}\n")
+        
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply_msg))
+  
 
 if __name__ == "__main__":
   app.run()
