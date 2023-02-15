@@ -17,7 +17,7 @@ conn = db.connect(host='localhost', dbname='flaskdb', user='megoo', password=os.
 
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, PostbackAction,URIAction, MessageAction, FlexSendMessage, ButtonsTemplate
 
 
 
@@ -55,17 +55,90 @@ def callback():
         abort(400)
     return 'OK'
 
+
+
+
+
+
 @line_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global working_status
     if event.message.type != "text":
         return
 
-    if event.message.text == "說話":
-        working_status = True
+    # 分出大類別，回傳Flex Message選單
+    if event.message.text == "Python面試題":
+        working_status = False
         line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="我可以說話囉，歡迎來跟我互動 ^_^ "))
+            event.reply_token,FlexSendMessage(
+                alt_text='hello',
+                contents={
+                "type": "bubble",
+                "hero": {
+                    "type": "image",
+                    "url": "https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/0f/01/f2/a7.jpg",
+                    "size": "full",
+                    "aspectRatio": "20:13",
+                    "aspectMode": "cover",
+                    "action": {
+                    "type": "uri",
+                    "uri": "http://linecorp.com/"
+                    }
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": "Python工程師面試題",
+                        "weight": "bold",
+                        "size": "xl"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "margin": "lg",
+                        "spacing": "sm",
+                        "contents": [
+                        {
+                            "type": "text",
+                            "text": "請選擇主題，我會隨機提問"
+                        }
+                        ]
+                    }
+                    ]
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "sm",
+                    "contents": [
+                    {
+                        "type": "button",
+                        "style": "link",
+                        "height": "sm",
+                        "action": {
+                        "type": "message",
+                        "label": "Python基礎題",
+                        "text": "_Python基礎題"
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "style": "link",
+                        "height": "sm",
+                        "action": {
+                        "type": "message",
+                        "label": "Python進階題",
+                        "text": "_Python進階題"
+                        }
+                    }
+                    ],
+                    "flex": 0
+                }
+                }
+            ))
         return
 
     if event.message.text == "閉嘴":
