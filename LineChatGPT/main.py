@@ -92,19 +92,95 @@ def handle_message(event):
                     "contents": [
                     {
                         "type": "text",
-                        "text": "Python工程師面試題",
+                        "text": "Python面試題",
                         "weight": "bold",
-                        "size": "xl"
+                        "size": "xl",
+                        "align": "center"
                     },
                     {
                         "type": "box",
                         "layout": "vertical",
-                        "margin": "lg",
+                        "margin": "xl",
                         "spacing": "sm",
+                        "contents": []
+                    },
+                    {
+                        "type": "box",
+                        "layout": "horizontal",
                         "contents": [
                         {
-                            "type": "text",
-                            "text": "請選擇主題，我會隨機提問"
+                            "type": "button",
+                            "action": {
+                            "type": "message",
+                            "label": "Python基礎題",
+                            "text": "__Python基礎題"
+                            }
+                        },
+                        {
+                            "type": "button",
+                            "action": {
+                            "type": "message",
+                            "label": "Python進階題",
+                            "text": "__Python進階題"
+                            }
+                        }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                        {
+                            "type": "button",
+                            "action": {
+                            "type": "message",
+                            "label": "資料庫相關",
+                            "text": "__資料庫相關"
+                            }
+                        },
+                        {
+                            "type": "button",
+                            "action": {
+                            "type": "message",
+                            "label": "爬蟲",
+                            "text": "__爬蟲"
+                            }
+                        }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                        {
+                            "type": "button",
+                            "action": {
+                            "type": "message",
+                            "label": "數據分析",
+                            "text": "__數據分析"
+                            }
+                        },
+                        {
+                            "type": "button",
+                            "action": {
+                            "type": "message",
+                            "label": "機器學習",
+                            "text": "__機器學習"
+                            }
+                        }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                        {
+                            "type": "button",
+                            "action": {
+                            "type": "message",
+                            "label": "資料結構與演算法",
+                            "text": "__資料結構與演算法"
+                            }
                         }
                         ]
                     }
@@ -113,30 +189,20 @@ def handle_message(event):
                 "footer": {
                     "type": "box",
                     "layout": "vertical",
-                    "spacing": "sm",
                     "contents": [
                     {
                         "type": "button",
-                        "style": "link",
-                        "height": "sm",
                         "action": {
                         "type": "message",
-                        "label": "Python基礎題",
-                        "text": "__Python基礎題"
-                        }
-                    },
-                    {
-                        "type": "button",
-                        "style": "link",
-                        "height": "sm",
-                        "action": {
-                        "type": "message",
-                        "label": "Python進階題",
-                        "text": "__Python進階題"
-                        }
+                        "label": "新增其他題目",
+                        "text": "還沒有這個功能喔哈哈哈"
+                        },
+                        "gravity": "center",
+                        "position": "relative",
+                        "offsetBottom": "10%"
                     }
                     ],
-                    "flex": 0
+                    "backgroundColor": "#ebe8e4"
                 }
                 }
             ))
@@ -204,6 +270,9 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text="我是隻聰明的紅毛猩猩！"))
         return
+
+    if event.message.text == "我想跟猩猩閒聊":
+        working_status = True
 
     if working_status:
         chatgpt.add_msg(f"HUMAN:{event.message.text}?\n")
