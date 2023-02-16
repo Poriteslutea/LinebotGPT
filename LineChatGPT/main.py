@@ -112,7 +112,7 @@ def handle_message(event):
                             "type": "button",
                             "action": {
                             "type": "message",
-                            "label": "Python基礎題",
+                            "label": "基礎題",
                             "text": "__Python基礎題"
                             }
                         },
@@ -120,7 +120,7 @@ def handle_message(event):
                             "type": "button",
                             "action": {
                             "type": "message",
-                            "label": "Python進階題",
+                            "label": "進階題",
                             "text": "__Python進階題"
                             }
                         }
@@ -232,7 +232,7 @@ def handle_message(event):
                     },
                     "footer": {
                         "type": "box",
-                        "layout": "horizontal",
+                        "layout": "vertical",
                         "contents": [
                             {
                                 "type": "button",
@@ -240,6 +240,15 @@ def handle_message(event):
                                 "type": "postback",
                                 "label": "我要問GPT",
                                 "data": post_ques,
+                                "displayText": "我要求救~"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "action": {
+                                "type": "message",
+                                "label": "換一題",
+                                "text": event.message.text
                                 }
                             },
                             {

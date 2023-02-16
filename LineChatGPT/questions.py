@@ -27,21 +27,21 @@ for i in range(1,9):
     q_dict[chapter[i-1]] = ch_qlist
 
 # 正規表達式
-role = re.compile(r'\d.\d.\d ')
+# role = re.compile(r'\d.\d.\d ')
 
 # 處理與選擇資料
 for k,v in q_dict.items():
     new_ques = []
     for ques in v:
-        if role.match(ques):
-            ques = ques.split(' ')[1]
-            ques = re.sub(r'\d+', '', ques)
-            new_ques.append(ques)
+        # if role.match(ques):
+        ques = ques.split(' ')[1]
+        ques = re.sub(r'\d+', '', ques)
+        new_ques.append(ques)
     q_dict[k] = new_ques
 
 def get_question(catagory, q_dict=q_dict):
     q_list = q_dict[catagory]
-    idx = randint(0,len(q_list))
+    idx = randint(0,len(q_list)-1)
     return q_list[idx]
 
 
